@@ -39,10 +39,4 @@ def changeCsvString(data, chunkRange, jump):
 
   return windowList
 
-datacsv = pd.read_csv("dataset.csv")
-lista = changeCsvString(datacsv, 10, 5)
-
-for i in range(len(lista)):
-  print(lista[i])
-
 
