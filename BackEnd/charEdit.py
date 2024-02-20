@@ -1,29 +1,48 @@
 import pandas as pd
+import itertools as itools
 
-data = pd.read_csv("dataset.csv")
-string = data.iloc[0, 3]
+def changeCsvString(data, chunkRange, jump):
+  string = data.iloc[0, 3]
 
-refTable = {
-    43:  [data.iloc[0, 1], data.iloc[0, 2]],
-    15:  [data.iloc[1, 1], data.iloc[1, 2]],
-    100: [data.iloc[2, 1], data.iloc[2, 2]],
-    54:  [data.iloc[3, 1], data.iloc[3, 2]],
-    33:  [data.iloc[4, 1], data.iloc[4, 2]],
-    19:  [data.iloc[5, 1], data.iloc[5, 2]],
-    97:  [data.iloc[6, 1], data.iloc[6, 2]],
-    13:  [data.iloc[7, 1], data.iloc[7, 2]]
-}
+  refList = []
+  windowList = []
+  for i in range(len(data)):
+      refList.append([data.iloc[i, 0], data.iloc[i, 1], data.iloc[i, 2]])
 
-windowCount = 0
-print(string)
+  print(string)
 
-for i in range(0, len(string), 5):
-    volatileStr = list(string) 
-    for j in range(i, min(i + 9, len(string))):
-        if j in refTable:
-            ref = refTable[j]
-            if len(ref) > 1:
-                volatileStr[j] = ref[1]
-                editedStr = "".join(volatileStr)
-                print(editedStr)
+  for i in range(0, len(string), jump):
+      change = False
+      chunk = list(string[i:min(i + chunkRange, len(string))])  # Obtenemos el chunk actual
+      window = []
+
+      # Verificamos si hay elementos en el chunk que necesitan ser cambiados
+      for j, char in enumerate(chunk):
+          chunk_index = i + j
+          for ref in refList:
+              if ref[0] == chunk_index:  # Comparamos el índice del chunk con la posición en refList
+                  if len(ref) > 1:
+                      modChunk = chunk[:]  # Creamos una copia del chunk original
+                      modChunk[j] = ref[2]  # Reemplazamos el carácter en el chunk
+                      window.append("".join(modChunk))  # Almacenamos la nueva versión del chunk en la ventana
+                      change = True  # Indicamos que hubo un cambio
+
+      if len(window) > 1:
+        combinaciones = []
+        for r in range(2, len(window) + 1):
+          combinaciones.extend(itools.combinations(window, r))
+        for combinacion in combinaciones:
+          window.extend(combinacion)
+      # Imprimimos la ventana solo si se realizaron cambios en el chunk
+      if change:
+        windowList.append(window)
+
+  return windowList
+
+datacsv = pd.read_csv("dataset.csv")
+lista = changeCsvString(datacsv, 10, 5)
+
+for i in range(len(lista)):
+  print(lista[i])
+
 
