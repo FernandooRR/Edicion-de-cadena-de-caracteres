@@ -38,7 +38,7 @@ def changeCsvString(data, chunkRange, jump):
         for ref in range(len(changeRefs), len(refComb)):
           print(refComb[ref])
           refs = refComb[ref]
-          combChunk = chunk
+          combChunk = chunk.copy()
           for it in refs:
             for j, char in enumerate(chunk):
               chunkIndex = i + j
