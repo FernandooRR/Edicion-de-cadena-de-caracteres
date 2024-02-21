@@ -27,24 +27,25 @@ def changeCsvString(data, chunkRange, jump):
                       modStr = list(string) # Creamos una copia del string original
                       modStr[j] = ref[2]  # Reemplazamos el carácter en el string
                       nuStr[j] = ref[2]
-                      changeRefs.append(ref)
+                      changeRefs.append(ref) #Se guardan los registros de cambios en la ventana
                       window.append("".join(modStr))  # Almacenamos la nueva versión del string en la ventana
                       change = True  # Indicamos que hubo un cambio
-      if len(changeRefs) > 2:
+      if len(changeRefs) > 2: #Evalua si en la ventana hay mas de 2 cambios registrados
         refComb = []
         for r in range(1,len(changeRefs)):
-          refComb.extend(itools.combinations(changeRefs, r))
-        for ref in range(len(changeRefs), len(refComb)):
+          refComb.extend(itools.combinations(changeRefs, r)) #Se guarda una lista de posibles combinaciones de registros
+        for ref in range(len(changeRefs), len(refComb)): #Se empieza a iterar desde el indice del ultimo elemento de la ventana hasta la longitud de las combinaciones
           print(refComb[ref])
-          refs = refComb[ref]
-          combStr = list(string)
-          for it in refs:
-            for j, char in enumerate(chunk):
-              chunkIndex = i + j
-              if it[0] == chunkIndex:
-                combStr[j] = it[2]
-          window.append("".join(combStr))
+          refs = refComb[ref] #Se guarda en cada iteracion la combinacion de referencias
+          combStr = list(string) #Se hace una copia del string en una lista
+          for it in refs: #Se itera sobre la combinacion de referencias
+            for j, char in enumerate(chunk): #Se itera sobre el chunk
+              chunkIndex = i + j #Se guarda el indice real del string sobre el chunk
+              if it[0] == chunkIndex: #revisa si el indice dentro del chunk es igual a la posicion de la referencia actual
+                combStr[j] = it[2] #Se realiza el cambio
+          window.append("".join(combStr)) #Se agrega el nuevo chunk combinado a la ventana
 
+      # Se agrega a la lista la ventana solo si se realizaron cambios en el chunk
       if change:
         if len(changeRefs) > 1:
           window.append("".join(nuStr))
