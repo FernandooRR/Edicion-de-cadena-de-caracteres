@@ -19,14 +19,14 @@ def changeCsvString(data, chunkRange, jump):
 
       # Verificamos si hay elementos en el chunk que necesitan ser cambiados
       for j, char in enumerate(chunk):
-          chunk_index = i + j
+          chunkIndex = i + j
           nuStr = list(string)
           for ref in refList:
-              if ref[0] == chunk_index:  # Comparamos el índice del chunk con la posición en refList
+              if ref[0] == chunkIndex:  # Comparamos el índice del chunk con la posición en refList
                   if len(ref) > 1:
                       modStr = list(string) # Creamos una copia del string original
-                      modStr[j] = ref[2]  # Reemplazamos el carácter en el string
-                      nuStr[j] = ref[2]
+                      modStr[chunkIndex] = ref[2]  # Reemplazamos el carácter en el string
+                      nuStr[chunkIndex] = ref[2]
                       changeRefs.append(ref) #Se guardan los registros de cambios en la ventana
                       window.append("".join(modStr))  # Almacenamos la nueva versión del string en la ventana
                       change = True  # Indicamos que hubo un cambio
@@ -42,19 +42,13 @@ def changeCsvString(data, chunkRange, jump):
             for j, char in enumerate(chunk): #Se itera sobre el chunk
               chunkIndex = i + j #Se guarda el indice real del string sobre el chunk
               if it[0] == chunkIndex: #revisa si el indice dentro del chunk es igual a la posicion de la referencia actual
-                combStr[j] = it[2] #Se realiza el cambio
+                combStr[chunkIndex] = it[2] #Se realiza el cambio
           window.append("".join(combStr)) #Se agrega el nuevo chunk combinado a la ventana
 
       # Se agrega a la lista la ventana solo si se realizaron cambios en el chunk
       if change:
         if len(changeRefs) > 1:
           window.append("".join(nuStr))
-        windowList.append(window)
-
-  return windowList
-
-      # Imprimimos la ventana solo si se realizaron cambios en el chunk
-      if change:
         windowList.append(window)
 
   return windowList
