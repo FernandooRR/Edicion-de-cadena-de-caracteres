@@ -52,3 +52,26 @@ def changeCsvString(data, chunkRange, jump):
         windowList.append(window)
 
   return windowList
+
+def allPosCombs(data):
+  combList = []
+  string = data.iloc[0, 3]
+
+  refList = []
+  strList = []
+  for i in range(len(data)):
+      refList.append([data.iloc[i, 0], data.iloc[i, 1], data.iloc[i, 2]]) 
+
+  for r in range(len(refList)):
+        combList.extend(itools.combinations(refList, r))
+  print(combList)
+  for i in range(len(combList)):
+    refs = combList[i]
+    combStr = list(string)
+    for j in refs:
+      for c, char in enumerate(string):
+        if j[0] == c:
+          combStr[c] = j[2]
+    strList.append("".join(combStr))
+
+  return strList
